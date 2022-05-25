@@ -1,14 +1,17 @@
 #!/usr/bin/python3
 
+import os
 import requests
 from lxml import html
 import csv
 import coloredlogs
 import logging
 
+save_path = "data"
+
 
 def collect_aws():
-    file_name = "awsip.txt"
+    file_name = os.path.join(save_path, "awsip.txt")
     file = open(file_name, 'wb')
     try:
         logger.info('Getting IPs for AWS')
@@ -19,16 +22,17 @@ def collect_aws():
             file.write(item["ip_prefix"].encode()+b'\n')
         print('Saved to %s' % file_name)
         file.close()
+        remove_dups(file_name, "awsip.csv")
 
     except Exception as e:
         logger.error(f'Error: {e}')
 
 
 def collect_azure():
-    file_name = "azureip.txt"
+    file_name = os.path.join(save_path, "azureip.txt")
     file = open(file_name, 'wb')
     try:
-        logger.info('Checking for Azure')
+        logger.info('Getting IPs for Azure')
         azure_url = 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519'
         page = requests.get(azure_url)
         tree = html.fromstring(page.content)
@@ -42,16 +46,17 @@ def collect_azure():
                 file.write(prefix.encode()+b'\n')
         print('Saved to %s' % file_name)
         file.close()
+        remove_dups(file_name, "azureip.csv")
 
     except Exception as e:
         logger.error(f'Error: {e}')
 
 
 def collect_gcp():
-    file_name = "gcpip.txt"
+    file_name = os.path.join(save_path, "gcpip.txt")
     file = open(file_name, 'wb')
     try:
-        logger.info('Checking for GCP')
+        logger.info('Getting IPs for GCP')
         gcp_url = 'https://www.gstatic.com/ipranges/cloud.json'
         gcp_ips = requests.get(gcp_url, allow_redirects=True).json()
 
@@ -60,16 +65,17 @@ def collect_gcp():
                 str(item.get("ipv4Prefix", item.get("ipv6Prefix"))).encode()+b'\n')
         print('Saved to %s' % file_name)
         file.close()
+        remove_dups(file_name, "gcpip.csv")
 
     except Exception as e:
         logger.error(f'Error: {e}')
 
 
 def collect_oci():
-    file_name = "ociip.txt"
+    file_name = os.path.join(save_path, "ociip.txt")
     file = open(file_name, 'wb')
     try:
-        logger.info('Checking for OCI')
+        logger.info('Getting IPs for OCI')
         oci_url = 'https://docs.cloud.oracle.com/en-us/iaas/tools/public_ip_ranges.json'
         oci_ips = requests.get(oci_url, allow_redirects=True).json()
 
@@ -79,16 +85,17 @@ def collect_oci():
                     str(cidr_item["cidr"]).encode()+b'\n')
         print('Saved to %s' % file_name)
         file.close()
+        remove_dups(file_name, "ociip.csv")
 
     except Exception as e:
         logger.error(f'Error: {e}')
 
 
 def collect_do():
-    file_name = "doip.txt"
+    file_name = os.path.join(save_path, "doip.txt")
     file = open(file_name, 'wb')
     try:
-        logger.info('Checking for DigitalOcean')
+        logger.info('Getting IPs for DigitalOcean')
 
         # This is the file linked from the digitalocean platform documentation website:
         # https://www.digitalocean.com/docs/platform/
@@ -105,9 +112,25 @@ def collect_do():
 
         print('Saved to %s' % file_name)
         file.close()
+        remove_dups(file_name, "doip.csv")
 
     except Exception as e:
         logger.error(f'Error: {e}')
+
+
+def remove_dups(file, newfile):
+    # holds lines already seen
+    newfile = os.path.join(save_path, newfile)
+    outfile = open(newfile, "w")
+
+    lines_seen = set()
+    for line in open(file, "r"):
+        if line not in lines_seen:  # not a duplicate
+            outfile.write(line)
+            lines_seen.add(line)
+    outfile.close()
+
+    os.remove(file)
 
 
 logger = logging.getLogger(__name__)
