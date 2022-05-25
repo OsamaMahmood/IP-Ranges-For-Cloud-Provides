@@ -41,7 +41,7 @@ Run the tool:
 $ python3 cloud_ip_ranges.py
 ```
 
-If you don't want any IPv6 addresses in your lists you can use the following tool.
+If you don't want any IPv6 addresses in your lists you can use the following tool:
 
 Run the tool:
 
