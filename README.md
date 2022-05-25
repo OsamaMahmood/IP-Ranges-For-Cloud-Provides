@@ -23,7 +23,7 @@ The installation method:
 
 ```shell script
 $ git clone https://github.com/OsamaMahmood/IP-Ranges-For-Cloud-Provides.git
-$ cloud_ip_ranges
+$ cd IP-Ranges-For-Cloud-Provides
 ```
 
 Alternatively, you can setup a virtual environment and install dependencies:
