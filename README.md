@@ -1,4 +1,5 @@
 # IP-Ranges-For-Cloud-Provides
+
 Collect IP addresses owned by public cloud providers (AWS, GCP, etc..)
 
 ## Description
@@ -7,7 +8,7 @@ Most cloud providers publish up to date lists of their IP address ranges. This t
 
 Supports:
 
-- [x] AWS ([source](https://ip-ranges.amazonaws.com/ip-ranges.json)) 
+- [x] AWS ([source](https://ip-ranges.amazonaws.com/ip-ranges.json))
 - [x] Azure ([source](https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519))
 - [x] Google Cloud Platform ([source](https://www.gstatic.com/ipranges/cloud.json))
 - [ ] Alibaba Cloud (currently doesn't publish lists)
@@ -37,5 +38,14 @@ $ pip install -r requirements.txt
 Run the tool:
 
 ```shell script
-$ cloud_ip_ranges.py
+$ python3 cloud_ip_ranges.py
+```
+
+If you don't want any IPv6 addresses in your lists you can use the following tool.
+
+Run the tool:
+
+```shell script
+$ python3 remove_ipv6.py -h
+$ python remove_ipv6.py -i data/awsip.csv -o newfile.csv
 ```
