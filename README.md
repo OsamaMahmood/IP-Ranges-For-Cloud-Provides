@@ -39,6 +39,8 @@ Run the tool:
 
 ```shell script
 $ python3 cloud_ip_ranges.py
+$ ls data/
+awsip.csv   azureip.csv doip.csv    gcpip.csv   ociip.csv
 ```
 
 If you don't want any IPv6 addresses in your lists you can use the following tool:
